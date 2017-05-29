@@ -11,7 +11,7 @@
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="/mysite/assets/css/board.css" rel="stylesheet"
+<link href="${pageContext.request.contextPath }/assets/css/board.css" rel="stylesheet"
 	type="text/css">
 </head>
 <body>
@@ -35,10 +35,11 @@
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.servletContext.contextPath }/board">글목록</a>
-					<a href="${pageContext.servletContext.contextPath }/board?a=modifyform&bno=${boardvo.no }">글수정</a>
-					<a href="${pageContext.servletContext.contextPath }/board?a=writeform&bno=${boardvo.no }&gno=${boardvo.gno }
-					&ono=${boardvo.ono }&depth=${boardvo.depth }">답글달기</a>
+					<a href="${pageContext.servletContext.contextPath }/board/list">글목록</a>
+						<c:if test="${boardvo.userno==authUser.no}">
+							<a href="${pageContext.servletContext.contextPath }/board/modify?bno=${boardvo.no }">글수정</a>
+						</c:if>				
+					<a href="${pageContext.servletContext.contextPath }/board/reply?bno=${boardvo.no }">답글달기</a>
 				</div>
 			</div>
 		</div>

@@ -31,28 +31,28 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>
-					<c:set var="count" value="${fn:length(list2) }" />
+					<c:set var="count" value="${count }" />
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<tr>
 							<td>${count-(vo.rownum-1) }</td>
 							<c:choose>
 								<c:when test="${vo.depth > 0}">
 									<td class="left" style="padding-left:${vo.depth * 20}px">
-										<img
-										src="${pageContext.request.contextPath }/assets/images/reply.png">
+										<img src="${pageContext.request.contextPath }/assets/images/reply.png">
 								</c:when>
 								<c:otherwise>
 									<td class="left">
 								</c:otherwise>
 							</c:choose>
-							<a href="${pageContext.servletContext.contextPath }/board?a=view&bno=${vo.no }">${vo.title }</a>
+							<a href="${pageContext.servletContext.contextPath }/board/view?bno=${vo.no }">${vo.title }</a>
 							</td>
 							<td>${vo.name }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.date }</td>
-							<td><a
-								href="${pageContext.servletContext.contextPath }/board?a=delete&userno=${no }&bno=${vo.no }"
-								class="del">삭제</a></td>
+							<td><c:if test="${vo.userno==authUser.no}">
+									<a href="${pageContext.servletContext.contextPath }/board/delete?bno=${vo.no }"
+										class="del">삭제</a>
+								</c:if></td>
 						</tr>
 					</c:forEach>
 				</table>
@@ -63,7 +63,8 @@
 
 						<li><c:choose>
 								<c:when test="${pageno < 1 }">
-									<a href="${pageContext.servletContext.contextPath }/board?a=list&pageno=${pageno-1}">◀</a>
+									<a
+										href="${pageContext.servletContext.contextPath }/board/list?bno=${bno-1}">◀</a>
 								</c:when>
 								<c:otherwise>
 									<a href="">◀</a>
@@ -71,16 +72,18 @@
 							</c:choose></li>
 						<!-- for문을 이용해서 해야함 -->
 
-						<c:forEach var="i" begin="1" end="${fn:length(list2)/10 +1 }">
+						<c:forEach var="i" begin="1" end="${count/10 +1 }">
 							<c:if test="${pageno==i }">
 								<li class="selected">
 							</c:if>
-							<a href="${pageContext.servletContext.contextPath }/board?a=list&pageno=${i}">${i }</a>
+							<a
+								href="${pageContext.servletContext.contextPath }/board/list?pageno=${i}">${i }</a>
 							</li>
 						</c:forEach>
 						<li><c:choose>
 								<c:when test="${pageno < i }">
-									<a href="${pageContext.servletContext.contextPath }/board?a=list&pageno=${pageno+1}">▶</a>
+									<a
+										href="${pageContext.servletContext.contextPath }/board/list?pageno=${pageno+1}">▶</a>
 								</c:when>
 								<c:otherwise>
 									<a href="">▶</a>
@@ -89,7 +92,9 @@
 					</ul>
 				</div>
 				<div class="bottom">
-					<a href="${pageContext.servletContext.contextPath }/board?a=writeform" id="new-book">글쓰기</a>
+					<a
+						href="${pageContext.servletContext.contextPath }/board/write"
+						id="new-book">글쓰기</a>
 				</div>
 			</div>
 		</div>

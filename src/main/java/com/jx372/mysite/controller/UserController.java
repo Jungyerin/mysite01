@@ -86,12 +86,10 @@ public class UserController {
 	
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public String modify(
-			@ModelAttribute UserVo authUser,
-			@RequestParam (value="no") Long no){
+			@ModelAttribute UserVo authUser){
 
-		
-		userService.editUser(authUser,no);
-		authUser=userService.getUser(authUser.getNo());		/*세션이 수정이 안되면 user의 정보가 바뀌지 않아서 다시 회원정보 수정을 들어가면 값이 안바뀜*/	
+		//System.out.println(authUser+" "+no);
+		userService.editUser(authUser);	
 		
 		return "redirect:/main";		
 	}

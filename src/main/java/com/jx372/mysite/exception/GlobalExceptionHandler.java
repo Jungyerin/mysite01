@@ -24,8 +24,6 @@ public class GlobalExceptionHandler {
 		System.out.println(e);
 		
 		return mav;
-	}
-	
-	
+	}	
 
 }

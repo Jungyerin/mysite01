@@ -28,18 +28,10 @@ public class UserService {
 		return userDao.get(email, pwd);
 	}
 
-	public void editUser(UserVo userVo, Long no) {
-		
-		if(userVo.getPwd()=="")
-		{
-			System.out.println("비번 입력 안함!");
-			userDao.update(userVo, no);
-		}
-		else
-		{
-			System.out.println("비번 입력 함!");
-			userDao.updatepw(userVo, no);
-		}
+	public void editUser(UserVo userVo) {		
+
+			userDao.update(userVo);
+
 	}
 
 	public UserVo getUser(Long no) {

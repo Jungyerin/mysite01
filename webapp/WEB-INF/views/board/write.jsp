@@ -7,31 +7,19 @@
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="/mysite/assets/css/board.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath }/assets/css/board.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="/mysite/board">
-					<input type = "hidden" name = "a" value="write">
-					<input type = "hidden" name = "userno" value="${userno }">
-					<input type = "hidden" name = "bno" value="${bno }">
-					<input type = "hidden" name = "gno" value="${gno }">
-					<input type = "hidden" name = "ono" value="${ono }">
-					<input type = "hidden" name = "depth" value="${depth }">
+				<form class="board-form" method="post" action="${pageContext.request.contextPath }/board/write">
+					<input type = "hidden" name = "userno" value="${authUser.no }">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">
-								<c:choose>
-									<c:when test="${gno == 0 }">									
-										글쓰기
-									</c:when>
-									<c:otherwise>
-										답글쓰기
-									</c:otherwise>
-								</c:choose>
+								글쓰기
 							</th>
 						</tr>
 						<tr>
@@ -46,7 +34,7 @@
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="${pageContext.servletContext.contextPath }/board">취소</a>
+						<a href="${pageContext.servletContext.contextPath }/board/list">취소</a>
 						<input type="submit" value="등록">
 					</div>
 				</form>				

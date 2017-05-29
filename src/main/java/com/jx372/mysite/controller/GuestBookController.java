@@ -60,10 +60,6 @@ public class GuestBookController {
 	public String delete(HttpSession session, @RequestParam(value = "no") Long no,
 			@RequestParam(value = "pwd") String pwd, @RequestParam(value = "name") String name) {
 
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-
-		System.out.println(no+" "+pwd+" "+name+" "+authUser.getNo()); /*사용자와 작성자 일치 하는것은 아직 못함*/
-
 		gbService.delete(no, pwd, name);
 
 		return "redirect:/guestbook/list";
