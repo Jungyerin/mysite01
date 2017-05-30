@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<select id="getlist" resultType="boardvo" parameterType="map">
+		<![CDATA[
+		SELECT r.rownum as rownum, r.no as no, r.user_no as userno, r.name as name, r.title as title, r.date as date
+		, r.hit as hit, r.g_no as gno, r.o_no as ono, r.depth as depth 
+		FROM (SELECT @RNUM:=@RNUM+1 'ROWNUM' , a.* FROM (SELECT @RNUM:=0) R, 
+			(select b.no, b.user_no, u.name, b.title, b.date, b.hit, b.g_no, b.o_no, b.depth from board b, user u
+				where b.user_no=u.no 
+				order by b.g_no desc, b.o_no asc) a) r
+		WHERE ROWNUM BETWEEN #{begin } AND #{end }
+		]]>
+	</select>
+
+	<select id="getByNo" resultType="boardvo" parameterType="Long">
+	<![CDATA[
+		select no, user_no as userno, title, content, hit, g_no as gno, o_no as ono, depth
+		from board
+		where no=#{no }
+	]]>
+	</select>
+
+	<select id="getCount" resultType="int">
+	<![CDATA[
+		select count(*) from board
+	]]>
+	</select>
+
+	<insert id="insert" parameterType="boardvo">
+		<![CDATA[
+			insert into board values 
+			( null, #{userno }, #{title }, #{content }, now(), 0, (select * from (select ifnull(max(g_no),0)+1 from board) a), 1, 0)		
+		]]>
+
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select
+			last_insert_id()
+		</selectKey>
+	</insert>
+
+	<insert id="delete" parameterType="long">
+		<![CDATA[
+			delete from board where no=#{no }
+		]]>
+	</insert>
+
+	<update id="updateHit" parameterType="long">
+	<![CDATA[
+		update board set hit=hit+1 where no=#{no }
+	]]>
+	</update>
+
+	<update id="update" parameterType="boardvo">
+	<![CDATA[
+		update board set title=#{title }, content=#{content }, date=now() where no=#{no }
+	]]>
+	</update>
+	
+	
+	<insert id="insertC" parameterType="boardvo">
+		<![CDATA[
+			insert into board values ( null, #{userno }, #{title }, #{content }, now(), 0, #{gno }, #{ono }+1, #{depth }+1)	
+		]]>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>	
+	
+	<select id="getC" resultType="boardvo">
+	<![CDATA[
+		select b.no as no, b.user_no as userno, b.title as title, b.content as content, b.g_no as gno, b.o_no as ono, b.depth as depth
+		from board b, (select max(no) 'no' from board) a
+		where b.no=a.no
+	]]>
+	</select>
+	
+	<update id="updateC" parameterType="boardvo">
+	<![CDATA[
+		update board as b inner join (select a.no 'no', a.o_no+1 'num' 
+									from(select * 
+										from board 
+										where no != #{no } and g_no = #{gno } and depth = #{depth }) a) as a on (b.no=a.no)
+				set b.o_no=a.num 
+				where b.no != #{no }
+				and b.g_no = #{gno }
+				and b.depth = #{depth }
+	]]>
+	</update>
+
+</mapper>

@@ -30,7 +30,7 @@ public class BoardService {
 	}
 
 	public void hit(Long bno) {
-		boardDao.updatehit(bno);
+		boardDao.updateHit(bno);
 		
 	}
 

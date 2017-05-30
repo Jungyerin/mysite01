@@ -38,19 +38,22 @@
 							<c:choose>
 								<c:when test="${vo.depth > 0}">
 									<td class="left" style="padding-left:${vo.depth * 20}px">
-										<img src="${pageContext.request.contextPath }/assets/images/reply.png">
+										<img
+										src="${pageContext.request.contextPath }/assets/images/reply.png">
 								</c:when>
 								<c:otherwise>
 									<td class="left">
 								</c:otherwise>
 							</c:choose>
-							<a href="${pageContext.servletContext.contextPath }/board/view?bno=${vo.no }">${vo.title }</a>
+							<a
+								href="${pageContext.servletContext.contextPath }/board/view?bno=${vo.no }">${vo.title }</a>
 							</td>
 							<td>${vo.name }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.date }</td>
 							<td><c:if test="${vo.userno==authUser.no}">
-									<a href="${pageContext.servletContext.contextPath }/board/delete?bno=${vo.no }"
+									<a
+										href="${pageContext.servletContext.contextPath }/board/delete?bno=${vo.no }"
 										class="del">삭제</a>
 								</c:if></td>
 						</tr>
@@ -60,18 +63,6 @@
 
 				<div class="pager">
 					<ul>
-
-						<li><c:choose>
-								<c:when test="${pageno < 1 }">
-									<a
-										href="${pageContext.servletContext.contextPath }/board/list?bno=${bno-1}">◀</a>
-								</c:when>
-								<c:otherwise>
-									<a href="">◀</a>
-								</c:otherwise>
-							</c:choose></li>
-						<!-- for문을 이용해서 해야함 -->
-
 						<c:forEach var="i" begin="1" end="${count/10 +1 }">
 							<c:if test="${pageno==i }">
 								<li class="selected">
@@ -80,20 +71,11 @@
 								href="${pageContext.servletContext.contextPath }/board/list?pageno=${i}">${i }</a>
 							</li>
 						</c:forEach>
-						<li><c:choose>
-								<c:when test="${pageno < i }">
-									<a
-										href="${pageContext.servletContext.contextPath }/board/list?pageno=${pageno+1}">▶</a>
-								</c:when>
-								<c:otherwise>
-									<a href="">▶</a>
-								</c:otherwise>
-							</c:choose></li>
+
 					</ul>
 				</div>
 				<div class="bottom">
-					<a
-						href="${pageContext.servletContext.contextPath }/board/write"
+					<a href="${pageContext.servletContext.contextPath }/board/write"
 						id="new-book">글쓰기</a>
 				</div>
 			</div>

@@ -45,7 +45,7 @@ public class BoardController {
 
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		BoardVo boardvo = boardService.getBoard(bno);
-		// boardService.hit(bno); 조회수 올리는 것 테스트 다 한 후 주석 처리 없애기
+		boardService.hit(bno); 
 		model.addAttribute("boardvo", boardvo);
 		model.addAttribute("authUser", authUser);
 		return "board/view";
