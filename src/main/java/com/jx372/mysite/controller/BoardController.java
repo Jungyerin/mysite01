@@ -1,6 +1,6 @@
 package com.jx372.mysite.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,29 +25,32 @@ public class BoardController {
 
 	@RequestMapping("/list")
 	public String list(HttpSession session, Model model, @ModelAttribute BoardVo boardvo,
-			@RequestParam(value = "pageno", required = true, defaultValue = "1") int pageno) {
+			@RequestParam(value = "pageno", required = true, defaultValue = "1") int pageno,
+			@RequestParam(value = "keyword", required = true, defaultValue = "") String keyword) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		if (authUser == null) {
 			return "redirect:/user/login";
 		}
 
-		List<BoardVo> list = boardService.getList(pageno);
-		int count = boardService.getCount();
-		model.addAttribute("list", list);
-		model.addAttribute("count", count);
+		Map<String, Object> map=boardService.getList(pageno, keyword);
+		model.addAttribute("map", map);
 
 		return "board/list";
 	}
 
 	@RequestMapping("/view")
 	public String view(HttpSession session, Model model,
-			@RequestParam(value = "bno") Long bno) {
+			@RequestParam(value = "bno") Long bno,
+			@RequestParam(value = "keyword", required = true, defaultValue = "") String keyword,
+			@RequestParam(value = "pageno", required = true, defaultValue = "1") int pageno) {
 
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		BoardVo boardvo = boardService.getBoard(bno);
 		boardService.hit(bno); 
 		model.addAttribute("boardvo", boardvo);
 		model.addAttribute("authUser", authUser);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("pageno", pageno);
 		return "board/view";
 	}
 
@@ -59,9 +62,15 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(@ModelAttribute BoardVo boardvo) {
+	public String write(Model model, 
+			@ModelAttribute BoardVo boardvo,
+			@RequestParam(value = "keyword", required = true, defaultValue = "") String keyword,
+			@RequestParam(value = "pageno", required = true, defaultValue = "1") int pageno) {
 		
-		boardService.write(boardvo);
+		Map<String, Object> map = boardService.getList( pageno, keyword );
+		model.addAttribute( "map", map );
+		boardService.write(boardvo);		
+		
 		return "redirect:/board/list";
 
 	}
@@ -108,7 +117,7 @@ public class BoardController {
 		boardService.delete(bno);		
 		return "redirect:/board/list";
 	}
-
+	
 
 
 }

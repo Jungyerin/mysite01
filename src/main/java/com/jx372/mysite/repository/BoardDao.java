@@ -28,18 +28,12 @@ public class BoardDao {
 	@Autowired
 	private DataSource datasource;
 
-	public List<BoardVo> getList(int pageno) {
-
-		int begin = ((pageno - 1) * 10) + 1;
-		int end = pageno * 10;
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("begin", begin);
-		map.put("end", end);
+	public List<BoardVo> getList(Map<String, Object> map) {
 
 		List<BoardVo> list = sqlSession.selectList("board.getlist", map);
-
 		return list;
 	}
+
 
 	public BoardVo get(Long no) {
 
@@ -57,8 +51,8 @@ public class BoardDao {
 		return count == 1;
 	}
 
-	public int getCount() {
-		return sqlSession.selectOne("board.getCount");
+	public int getCount(String keyword) {
+		return sqlSession.selectOne("board.getCount",keyword);
 	}
 
 	public boolean updateHit(Long no) {
@@ -89,5 +83,10 @@ public class BoardDao {
 		int count = sqlSession.update("board.updateC", vo);
 		return count == 1;
 	}
+
+	public int getCountPa(String keyword) {		
+		return sqlSession.selectOne("board.getCountPa",keyword);
+	}
+
 
 }

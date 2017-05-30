@@ -4,15 +4,34 @@
 <mapper namespace="board">
 
 	<select id="getlist" resultType="boardvo" parameterType="map">
-		<![CDATA[
-		SELECT r.rownum as rownum, r.no as no, r.user_no as userno, r.name as name, r.title as title, r.date as date
-		, r.hit as hit, r.g_no as gno, r.o_no as ono, r.depth as depth 
-		FROM (SELECT @RNUM:=@RNUM+1 'ROWNUM' , a.* FROM (SELECT @RNUM:=0) R, 
-			(select b.no, b.user_no, u.name, b.title, b.date, b.hit, b.g_no, b.o_no, b.depth from board b, user u
-				where b.user_no=u.no 
-				order by b.g_no desc, b.o_no asc) a) r
-		WHERE ROWNUM BETWEEN #{begin } AND #{end }
-		]]>
+		<choose>
+			<when test="keyword == null or keyword ==''">
+				<![CDATA[
+					SELECT r.rownum as rownum, r.no as no, r.user_no as userno, r.name as name, r.title as title
+					, date_format(r.date, '%Y-%m-%d %p %h:%i:%s') as date
+					, r.hit as hit, r.g_no as gno, r.o_no as ono, r.depth as depth 
+					FROM (SELECT @RNUM:=@RNUM+1 'ROWNUM' , a.* 
+						FROM (SELECT @RNUM:=0) R, 
+						(select b.no, b.user_no, u.name, b.title, b.date, b.hit, b.g_no, b.o_no, b.depth from board b, user u
+						where b.user_no=u.no 
+						order by b.g_no desc, b.o_no asc) a) r
+					WHERE ROWNUM BETWEEN ${begin } AND ${end }		
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+					SELECT r.rownum as rownum, r.no as no, r.user_no as userno, r.name as name, r.title as title
+					, date_format(r.date, '%Y-%m-%d %p %h:%i:%s') as date
+					, r.hit as hit, r.g_no as gno, r.o_no as ono, r.depth as depth 
+					FROM (SELECT @RNUM:=@RNUM+1 'ROWNUM' , a.* FROM (SELECT @RNUM:=0) R, 
+						(select b.no, b.user_no, u.name, b.title, b.date, b.hit, b.g_no, b.o_no, b.depth from board b, user u
+						where b.user_no=u.no 
+                		and (title like '%${keyword }%' or content like '%${keyword }%')
+						order by b.g_no desc, b.o_no asc) a) r
+					WHERE ROWNUM BETWEEN ${begin } AND ${end }
+				]]>
+			</otherwise>
+		</choose>
 	</select>
 
 	<select id="getByNo" resultType="boardvo" parameterType="Long">
@@ -23,11 +42,23 @@
 	]]>
 	</select>
 
-	<select id="getCount" resultType="int">
-	<![CDATA[
-		select count(*) from board
-	]]>
+	<select id="getCount" resultType="int" parameterType="string">
+	<choose>
+			<when test="_parameter == null or _parameter ==''">
+				<![CDATA[
+					select count(*) from board
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+					select count(*) 
+					from board
+					where (title like '%${_parameter }%' or content like '%${_parameter }%')
+				]]>
+			</otherwise>
+		</choose>
 	</select>
+
 
 	<insert id="insert" parameterType="boardvo">
 		<![CDATA[
@@ -58,17 +89,18 @@
 		update board set title=#{title }, content=#{content }, date=now() where no=#{no }
 	]]>
 	</update>
-	
-	
+
+
 	<insert id="insertC" parameterType="boardvo">
 		<![CDATA[
 			insert into board values ( null, #{userno }, #{title }, #{content }, now(), 0, #{gno }, #{ono }+1, #{depth }+1)	
 		]]>
 		<selectKey keyProperty="no" resultType="long" order="AFTER">
-			select last_insert_id()
+			select
+			last_insert_id()
 		</selectKey>
-	</insert>	
-	
+	</insert>
+
 	<select id="getC" resultType="boardvo">
 	<![CDATA[
 		select b.no as no, b.user_no as userno, b.title as title, b.content as content, b.g_no as gno, b.o_no as ono, b.depth as depth
@@ -76,7 +108,7 @@
 		where b.no=a.no
 	]]>
 	</select>
-	
+
 	<update id="updateC" parameterType="boardvo">
 	<![CDATA[
 		update board as b inner join (select a.no 'no', a.o_no+1 'num' 
@@ -89,5 +121,6 @@
 				and b.depth = #{depth }
 	]]>
 	</update>
+
 
 </mapper>

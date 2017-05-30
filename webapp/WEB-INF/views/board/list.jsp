@@ -16,12 +16,14 @@
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
-					<input type="text" id="kwd" name="kwd" value=""> <input
-						type="submit" value="찾기">
+					<form id="search_form" action="${pageContext.request.contextPath }/board/list" method="get">
+					<input type="text" id="kwd" name="keyword" value="${map.keyword }">					
+					<input type="submit" value="찾기">
 				</form>
 
-
+				<c:if test="${map.keyword!=''}">
+					<a href="${pageContext.servletContext.contextPath }/board/list">전체글보기</a>
+				</c:if>
 				<table class="tbl-ex">
 					<tr>
 						<th>번호</th>
@@ -31,10 +33,10 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>
-					<c:set var="count" value="${count }" />
-					<c:forEach items="${list }" var="vo" varStatus="status">
+					<c:set var="count" value="${map.count }" />
+					<c:forEach items="${map.list }" var="vo" varStatus="status">
 						<tr>
-							<td>${count-(vo.rownum-1) }</td>
+							<td>${map.count-(vo.rownum-1) }</td>
 							<c:choose>
 								<c:when test="${vo.depth > 0}">
 									<td class="left" style="padding-left:${vo.depth * 20}px">
@@ -46,7 +48,7 @@
 								</c:otherwise>
 							</c:choose>
 							<a
-								href="${pageContext.servletContext.contextPath }/board/view?bno=${vo.no }">${vo.title }</a>
+								href="${pageContext.servletContext.contextPath }/board/view?bno=${vo.no }&keyword=${map.keyword }&pageno=${map.pageno }">${vo.title }</a>
 							</td>
 							<td>${vo.name }</td>
 							<td>${vo.hit }</td>
@@ -63,20 +65,32 @@
 
 				<div class="pager">
 					<ul>
-						<c:forEach var="i" begin="1" end="${count/10 +1 }">
-							<c:if test="${pageno==i }">
-								<li class="selected">
-							</c:if>
-							<a
-								href="${pageContext.servletContext.contextPath }/board/list?pageno=${i}">${i }</a>
-							</li>
+						<c:if test="${map.prevP > 0 }" >
+							<li><a href="${pageContext.servletContext.contextPath }/board/list?pageno=${map.prevP }&keyword=${map.keyword }">◀</a></li>
+						</c:if>
+						
+						<c:forEach var="i" begin="1" end="${map.count/map.listsize + 1  }">
+							<c:choose>
+								<c:when test="${map.endP < i }">
+									<li>${i }</li>
+								</c:when>
+								<c:when test="${map.pageno == i }">
+									<li class="selected">${i }</li>
+								</c:when>
+								<c:otherwise> 
+									<li><a href="${pageContext.request.contextPath }/board/list?pageno=${i }&keyword=${map.keyword }">${i }</a></li>
+								</c:otherwise>
+							</c:choose>
 						</c:forEach>
+						
+						<c:if test="${map.nextP > 0 }" >
+							<li><a href="${pageContext.request.contextPath }/board/list?pageno=${map.nextP }&keyword=${map.keyword }">▶</a></li>
+						</c:if>
 
 					</ul>
 				</div>
 				<div class="bottom">
-					<a href="${pageContext.servletContext.contextPath }/board/write"
-						id="new-book">글쓰기</a>
+					<a href="${pageContext.servletContext.contextPath }/board/write?pageno=${map.pageno }&keyword=${keyword }" id="new-book">글쓰기</a>
 				</div>
 			</div>
 		</div>
