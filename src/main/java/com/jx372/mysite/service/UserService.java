@@ -37,6 +37,11 @@ public class UserService {
 	public UserVo getUser(Long no) {
 		return userDao.get(no);
 	}
+
+	public boolean existEamil(String email) {
+		UserVo userVo = userDao.get(email);
+		return userVo != null;
+	}
 	
 
 }

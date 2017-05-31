@@ -61,4 +61,8 @@ public class UserDao {
 
 	}
 
+	public UserVo get(String email) {		
+		return sqlSession.selectOne("user.getByEmail",email);
+	}
+
 }
