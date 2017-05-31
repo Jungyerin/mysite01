@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jx372.mysite.exception.UserDaoException;
 import com.jx372.mysite.service.UserService;
 import com.jx372.mysite.vo.UserVo;
+import com.jx372.security.Auth;
 
 @Controller
 @RequestMapping("/user")
@@ -29,58 +30,26 @@ public class UserController {
 		return "user/join";
 	}
 	
-/*	@RequestMapping( value="/join",method=RequestMethod.POST)
+	@RequestMapping( value="/join",method=RequestMethod.POST)
 	public String join(@ModelAttribute UserVo userVo){
 		//System.out.println(userVo);
 		userService.join(userVo);
 		return "redirect:/user/joinsuccess";
-	}*/
-	
-	@ResponseBody
-	@RequestMapping( value="/join",method=RequestMethod.POST)
-	public String join(@RequestBody String requestBody){
-		//System.out.println(userVo);
-		return requestBody;
 	}
+	
 	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String login(){
 		return "user/login";		
 	}
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(
-			HttpSession session,
-			Model model,
-			@RequestParam (value="email", required=true, defaultValue="" ) String email, 
-			@RequestParam (value="pwd", required=true, defaultValue="" ) String pwd){
-		
-		UserVo userVo=userService.getUser(email, pwd);
-		if(userVo==null){
-			model.addAttribute("result", "fail");
-			return "user/login";
-		}
-		
-		session.setAttribute("authUser", userVo);
-		
-		return "redirect:/main";		
-	}
-	
-	@RequestMapping("/logout")
-	public String logout(HttpSession session){
-		
-		session.removeAttribute("authUser");
-		session.invalidate();
-		return "redirect:/main";
-		
-	}
 	
 	@RequestMapping( value="/joinsuccess")
 	public String joinsuccess(){
 		return "/user/joinsuccess";
 	}
 	
-	
+	@Auth
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
 	public String modify(HttpSession session){
 		
@@ -89,19 +58,55 @@ public class UserController {
 		if(authUser==null){
 			return "redirect:/user/login";
 		}
-
 		return "user/modify";
 	}
+
 	
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public String modify(
 			@ModelAttribute UserVo authUser){
 
-		//System.out.println(authUser+" "+no);
 		userService.editUser(authUser);	
 		
 		return "redirect:/main";		
 	}
+	
+	
+	/*@ResponseBody
+	@RequestMapping( value="/join",method=RequestMethod.POST)
+	public String join(@RequestBody String requestBody){
+		//System.out.println(userVo);
+		return requestBody;
+	}*/
+	
+	
+	
+//	@RequestMapping(value="/login", method=RequestMethod.POST)
+//	public String login(
+//			HttpSession session,
+//			Model model,
+//			@RequestParam (value="email", required=true, defaultValue="" ) String email, 
+//			@RequestParam (value="pwd", required=true, defaultValue="" ) String pwd){
+//		
+//		UserVo userVo=userService.getUser(email, pwd);
+//		if(userVo==null){
+//			model.addAttribute("result", "fail");
+//			return "user/login";
+//		}
+//		
+//		session.setAttribute("authUser", userVo);
+//		
+//		return "redirect:/main";		
+//	}
+	
+//	@RequestMapping("/logout")
+//	public String logout(HttpSession session){
+//		
+//		session.removeAttribute("authUser");
+//		session.invalidate();
+//		return "redirect:/main";
+//		
+//	}
 	
 //	@ExceptionHandler(UserDaoException.class)
 //	public String handleUserDaoException(){

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.jx372.mysite.service.BoardService;
 import com.jx372.mysite.vo.BoardVo;
 import com.jx372.mysite.vo.UserVo;
+import com.jx372.security.Auth;
 
 @Controller
 @RequestMapping("/board")
@@ -23,14 +24,11 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
+	@Auth
 	@RequestMapping("/list")
-	public String list(HttpSession session, Model model, @ModelAttribute BoardVo boardvo,
+	public String list(Model model, @ModelAttribute BoardVo boardvo,
 			@RequestParam(value = "pageno", required = true, defaultValue = "1") int pageno,
 			@RequestParam(value = "keyword", required = true, defaultValue = "") String keyword) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "redirect:/user/login";
-		}
 
 		Map<String, Object> map=boardService.getList(pageno, keyword);
 		model.addAttribute("map", map);
@@ -38,6 +36,7 @@ public class BoardController {
 		return "board/list";
 	}
 
+	@Auth
 	@RequestMapping("/view")
 	public String view(HttpSession session, Model model,
 			@RequestParam(value = "bno") Long bno,
@@ -54,13 +53,22 @@ public class BoardController {
 		return "board/view";
 	}
 
-	@RequestMapping(value = "/write", method = RequestMethod.GET)
+	//@Auth
+/*	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String write(Model model,HttpSession session) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		model.addAttribute("authUser", authUser);
 		return "board/write";
+	}*/
+	
+	@Auth
+	@RequestMapping(value = "/write", method = RequestMethod.GET)
+	public String write() {
+		
+		return "board/write";
 	}
 
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String write(Model model, 
 			@ModelAttribute BoardVo boardvo,
@@ -75,6 +83,7 @@ public class BoardController {
 
 	}
 
+	@Auth
 	@RequestMapping(value = "/reply", method = RequestMethod.GET)
 	public String reply(HttpSession session, Model model,  
 			@RequestParam(value = "bno") Long bno) {
@@ -86,6 +95,7 @@ public class BoardController {
 		return "board/reply";
 	}
 	
+	@Auth
 	@RequestMapping(value = "/reply", method = RequestMethod.POST)
 	public String reply(@ModelAttribute BoardVo boardvo) {
 		
@@ -94,6 +104,7 @@ public class BoardController {
 
 	}	
 	
+	@Auth
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public String modify(Model model,  
 			@RequestParam(value = "bno") Long bno) {
@@ -103,6 +114,7 @@ public class BoardController {
 		return "board/modify";
 	}
 	
+	@Auth
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modify(@ModelAttribute BoardVo boardvo) {
 		
@@ -116,8 +128,7 @@ public class BoardController {
 		
 		boardService.delete(bno);		
 		return "redirect:/board/list";
-	}
-	
+	}	
 
 
 }
