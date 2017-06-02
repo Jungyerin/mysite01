@@ -17,7 +17,7 @@
 				<div id="site-form">
 				<c:choose>
 					<c:when test="${adminvo == null }">
-						<form method="post" action="${pageContext.request.contextPath }/admin/insert">
+						<form method="post" action="${pageContext.request.contextPath }/admin/insert", enctype="multipart/form-data">
 						<label class="block-label" for="title">insert사이트 타이틀</label>
 						<input id="title" name="title" type="text" value="">
 						
@@ -25,8 +25,8 @@
 						<input id="welcomeMessage" name="message" type="text" value="">
 
 						<label class="block-label">프로필 이미지</label>
-						<img id="profile" src="">
-						<input type="file" name="file">
+						<img id="profile" src="${pageContext.request.contextPath }${adminvo.file }">
+						<input type="file" name="file1">
 
 						<label class="block-label">사이트 설명</label>
 						<textarea name="description"></textarea>
@@ -35,7 +35,7 @@
 						</form>
 					</c:when>
 					<c:otherwise>
-						<form method="post" action="${pageContext.request.contextPath }/admin/update">
+						<form method="post" action="${pageContext.request.contextPath }/admin/update", enctype="multipart/form-data">
 						<label class="block-label" for="title">사이트 타이틀</label>
 						<input id="title" name="title" type="text" value="${adminvo.title }">
 						
@@ -43,8 +43,8 @@
 						<input id="welcomeMessage" name="message" type="text" value="${adminvo.message }">
 
 						<label class="block-label">프로필 이미지</label>
-						<img id="profile" src="${adminvo.file }">
-						<input type="file" name="file">
+						<img id="profile" src="${pageContext.request.contextPath }${adminvo.file }">
+						<input type="file" name="file1">
 
 						<label class="block-label">사이트 설명</label>
 						<textarea name="description">${adminvo.description }</textarea>

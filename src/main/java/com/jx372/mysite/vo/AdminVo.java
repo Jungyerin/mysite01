@@ -17,13 +17,13 @@ public class AdminVo {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
 	public String getFile() {
 		return file;
 	}
 	public void setFile(String file) {
 		this.file = file;
 	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -32,9 +32,10 @@ public class AdminVo {
 	}
 	@Override
 	public String toString() {
-		return "AdminVo [title=" + title + ", message=" + message + ", file=" + file + ", description=" + description + "]";
+		return "AdminVo [title=" + title + ", message=" + message + ", file=" + file + ", description=" + description
+				+ "]";
 	}
-	
+
 	
 	
 	

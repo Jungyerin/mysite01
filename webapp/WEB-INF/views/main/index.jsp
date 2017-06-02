@@ -17,7 +17,7 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-introduction">
-					<img id="profile" src="${adminvo.file }">
+					<img id="profile" src="${pageContext.request.contextPath }${adminvo.file }">
 					<h2>${adminvo.message }</h2>
 					<p>
 						${adminvo.description }<br><br>

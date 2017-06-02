@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jx372.mysite.service.AdminService;
 import com.jx372.mysite.vo.AdminVo;
@@ -26,6 +28,7 @@ public class AdminController {
 		
 		AdminVo adminvo = adminservice.get();
 		model.addAttribute("adminvo", adminvo);
+		System.out.println("main adminvo : "+adminvo);
 		return "admin/main";
 	}
 	
@@ -38,9 +41,15 @@ public class AdminController {
 	}
 		
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@ModelAttribute AdminVo adminvo){	
+	public String update(@ModelAttribute AdminVo adminvo,
+			@RequestParam("file1") MultipartFile file1){
+	
+		String url1 = adminservice.restore(file1);
+	
+		adminvo.setFile(url1);
 		System.out.println("update : "+adminvo);
-		adminservice.update(adminvo);		
+		adminservice.update(adminvo);
+
 		return "redirect:/admin/main";
 	}
 	

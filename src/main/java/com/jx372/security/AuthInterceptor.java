@@ -16,7 +16,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		//1. handler 종류
 		if(handler instanceof HandlerMethod == false){
-			return false;
+			return true;
 		}
 		
 		//2. @Auth가 붙어 있는 지 확인 /*인터페이스로 만들어준 @auth 어노테이션을 가지고 와서 구현*/
