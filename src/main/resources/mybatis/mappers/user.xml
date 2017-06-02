@@ -5,7 +5,7 @@
 
 	<select id="getByNo2" resultType="map" parameterType="Long">
 	<![CDATA[
-		select no,name,email,gender
+		select no,name,email,gender,role
 		from user
 		where no=#{no }	
 	]]>
@@ -13,7 +13,7 @@
 
 	<select id="getByEmail" resultType="uservo" parameterType="string">
 	<![CDATA[
-		select no,name,email,gender
+		select no,name,email,gender,role
 		from user
 		where email=#{email }	
 	]]>
@@ -21,7 +21,7 @@
 
 	<select id="getByNo" resultType="uservo" parameterType="Long">
 	<![CDATA[
-		select no,name,email,gender
+		select no,name,email,gender,role
 		from user
 		where no=#{no }	
 	]]>
@@ -29,7 +29,7 @@
 
 	<select id="getByLogin" resultType="uservo" parameterType="map">
 	<![CDATA[
-		select no,name,email,gender
+		select no,name,email,gender,role
 		from user
 		where email=#{email }
 		and pwd = password(#{pwd })
@@ -56,7 +56,8 @@
 
 	<insert id="insert" parameterType="uservo">
 		<![CDATA[
-			insert into user values ( null, #{name }, #{email }, password(#{pwd }), #{gender })	
+			insert into user  
+			values ( null, #{name }, #{email }, password(#{pwd }), #{gender }, 'USER')	
 		]]>
 	</insert>
 </mapper>

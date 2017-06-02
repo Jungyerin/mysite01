@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +18,24 @@ import com.jx372.mysite.service.BoardService;
 import com.jx372.mysite.vo.BoardVo;
 import com.jx372.mysite.vo.UserVo;
 import com.jx372.security.Auth;
+import com.jx372.security.AuthUser;
 
 @Controller
 @RequestMapping("/board")
 public class BoardController {
+	
+	private static final Log LOG = LogFactory.getLog( com.jx372.mysite.controller.UserController.class );
 
 	@Autowired
 	private BoardService boardService;
+	
+	public void log(String str){
 
-	@Auth
+		LOG.warn( "#"+str+" - warn log" );
+		LOG.error( "#"+str+" - error log" );		
+	}
+	
+
 	@RequestMapping("/list")
 	public String list(Model model, @ModelAttribute BoardVo boardvo,
 			@RequestParam(value = "pageno", required = true, defaultValue = "1") int pageno,
@@ -32,24 +43,25 @@ public class BoardController {
 
 		Map<String, Object> map=boardService.getList(pageno, keyword);
 		model.addAttribute("map", map);
+		log("board-list");
 
 		return "board/list";
 	}
 
-	@Auth
 	@RequestMapping("/view")
-	public String view(HttpSession session, Model model,
+	public String view(@AuthUser UserVo authUser, Model model,
 			@RequestParam(value = "bno") Long bno,
 			@RequestParam(value = "keyword", required = true, defaultValue = "") String keyword,
 			@RequestParam(value = "pageno", required = true, defaultValue = "1") int pageno) {
 
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		BoardVo boardvo = boardService.getBoard(bno);
 		boardService.hit(bno); 
 		model.addAttribute("boardvo", boardvo);
 		model.addAttribute("authUser", authUser);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("pageno", pageno);
+		
+		log("board-view");
 		return "board/view";
 	}
 
@@ -64,7 +76,7 @@ public class BoardController {
 	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String write() {
-		
+		log("board-write");
 		return "board/write";
 	}
 
@@ -78,17 +90,16 @@ public class BoardController {
 		Map<String, Object> map = boardService.getList( pageno, keyword );
 		model.addAttribute( "map", map );
 		boardService.write(boardvo);		
-		
+		log("board-write");
 		return "redirect:/board/list";
 
 	}
 
 	@Auth
 	@RequestMapping(value = "/reply", method = RequestMethod.GET)
-	public String reply(HttpSession session, Model model,  
+	public String reply(@AuthUser UserVo authUser, Model model,  
 			@RequestParam(value = "bno") Long bno) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		
+		log("board-reply");
 		BoardVo boardvo = boardService.getBoard(bno);
 		model.addAttribute("boardvo", boardvo);
 		model.addAttribute("userno", authUser.getNo());
@@ -98,7 +109,7 @@ public class BoardController {
 	@Auth
 	@RequestMapping(value = "/reply", method = RequestMethod.POST)
 	public String reply(@ModelAttribute BoardVo boardvo) {
-		
+		log("board-reply");
 		boardService.reply(boardvo);
 		return "redirect:/board/list";
 

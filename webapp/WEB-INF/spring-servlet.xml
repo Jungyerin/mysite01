@@ -27,8 +27,13 @@
 					</list>
 				</property>
 			</bean>
-
 		</mvc:message-converters>
+
+
+		<!-- argument resolver controller의 handler의 argument resulver -->
+		<mvc:argument-resolvers>
+			<bean class="com.jx372.security.AuthUserHandlerMethodArgumentResolver" />
+		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
 
 
@@ -37,23 +42,21 @@
 
 	<!-- Interceptors -->
 	<mvc:interceptors>
-		<!-- mvc:interceptor>
-			<mvc:mapping path="/board/view" />
-			<bean class="com.jx372.mysite.interceptor.MyInterceptor02" />
-		</mvc:interceptor -->
+		<!-- mvc:interceptor> <mvc:mapping path="/board/view" /> <bean class="com.jx372.mysite.interceptor.MyInterceptor02" 
+			/> </mvc:interceptor -->
 		<mvc:interceptor>
 			<mvc:mapping path="/user/auth" />
 			<bean class="com.jx372.security.AuthLoginInterceptor" />
-		</mvc:interceptor>	
-			<mvc:interceptor>
+		</mvc:interceptor>
+		<mvc:interceptor>
 			<mvc:mapping path="/user/authout" />
 			<bean class="com.jx372.security.AuthLogoutInterceptor" />
-		</mvc:interceptor>	
+		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/user/auth"/>
-			<mvc:exclude-mapping path="/user/logout"/>
-			<mvc:exclude-mapping path="/assets/**"/>
+			<mvc:exclude-mapping path="/user/auth" />
+			<mvc:exclude-mapping path="/user/logout" />
+			<mvc:exclude-mapping path="/assets/**" />
 			<bean class="com.jx372.security.AuthInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>

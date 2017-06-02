@@ -1,7 +1,7 @@
 package com.jx372.mysite.controller;
 
-import javax.servlet.http.HttpSession;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,22 +17,32 @@ import com.jx372.mysite.exception.UserDaoException;
 import com.jx372.mysite.service.UserService;
 import com.jx372.mysite.vo.UserVo;
 import com.jx372.security.Auth;
+import com.jx372.security.AuthUser;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 	
+	private static final Log LOG = LogFactory.getLog( com.jx372.mysite.controller.UserController.class );
+	
 	@Autowired
 	private UserService userService;      /*DI*/
 	
+	public void log(String str){
+
+		LOG.warn( "#"+str+" - warn log" );
+		LOG.error( "#"+str+" - error log" );		
+	}
+	
 	@RequestMapping( value="/join",method=RequestMethod.GET)
 	public String join(){
+		log("join-get");
 		return "user/join";
 	}
 	
 	@RequestMapping( value="/join",method=RequestMethod.POST)
 	public String join(@ModelAttribute UserVo userVo){
-		//System.out.println(userVo);
+		log("join-post");
 		userService.join(userVo);
 		return "redirect:/user/joinsuccess";
 	}
@@ -40,34 +50,31 @@ public class UserController {
 	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String login(){
+		log("login-get");
 		return "user/login";		
 	}
 	
 	
 	@RequestMapping( value="/joinsuccess")
 	public String joinsuccess(){
+		log("joinsuccess");
 		return "/user/joinsuccess";
 	}
 	
 	@Auth
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
-	public String modify(HttpSession session){
-		
-		UserVo authUser=(UserVo) session.getAttribute("authUser");	/*세션이 수정이 안되면 user의 정보가 바뀌지 않아서 다시 회원정보 수정을 들어가면 값이 안바뀜*/		
-		
-		if(authUser==null){
-			return "redirect:/user/login";
-		}
+	public String modify(Model model, @AuthUser UserVo authUser){
+		log("modify-get");
+		/*세션이 수정이 안되면 user의 정보가 바뀌지 않아서 다시 회원정보 수정을 들어가면 값이 안바뀜*/		
+		model.addAttribute("authUser", authUser);
 		return "user/modify";
 	}
 
 	
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public String modify(
-			@ModelAttribute UserVo authUser){
-
-		userService.editUser(authUser);	
-		
+	public String modify(@ModelAttribute UserVo authUser){
+		log("modify-post");
+		userService.editUser(authUser);			
 		return "redirect:/main";		
 	}
 	

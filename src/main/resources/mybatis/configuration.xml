@@ -5,6 +5,7 @@
 		<typeAlias alias="guestbookvo" type="com.jx372.mysite.vo.GuestBookVo"/>
 		<typeAlias alias="uservo" type="com.jx372.mysite.vo.UserVo"/>
 		<typeAlias alias="boardvo" type="com.jx372.mysite.vo.BoardVo"/>
+		<typeAlias alias="adminvo" type="com.jx372.mysite.vo.AdminVo"/>
 	</typeAliases>
 
 	
@@ -13,5 +14,6 @@
 		<mapper resource="mybatis/mappers/user.xml" />
 		<mapper resource="mybatis/mappers/guestbook.xml" />
 		<mapper resource="mybatis/mappers/board.xml"/>
+		<mapper resource="mybatis/mappers/admin.xml"/>
 	</mappers>
 </configuration>

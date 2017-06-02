@@ -7,6 +7,7 @@ public class UserVo {
 	private String email;
 	private String pwd;
 	private String gender;
+	private String role;
 	public Long getNo() {
 		return no;
 	}
@@ -37,9 +38,17 @@ public class UserVo {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
 	@Override
 	public String toString() {
-		return "UserVo [no=" + no + ", name=" + name + ", email=" + email + ", pwd=" + pwd + ", gender=" + gender + "]";
+		return "UserVo [no=" + no + ", name=" + name + ", email=" + email + ", pwd=" + pwd + ", gender=" + gender
+				+ ", role=" + role + "]";
 	}
 	
 	
