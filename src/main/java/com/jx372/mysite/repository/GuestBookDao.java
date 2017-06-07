@@ -36,7 +36,9 @@ public class GuestBookDao {
 
 	public List<GuestBookVo> getList() {
 
-		List<GuestBookVo> list = sqlSession.selectList("guestbook.getlist");		
+
+		List<GuestBookVo> list = sqlSession.selectList("guestbook.getlist");
+		
 		return list;
 	}
 

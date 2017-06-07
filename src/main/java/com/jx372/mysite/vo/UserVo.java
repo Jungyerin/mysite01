@@ -1,10 +1,23 @@
 package com.jx372.mysite.vo;
 
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class UserVo {
 	
 	private Long no;
+	
+	@NotEmpty
+	@Length(min=2,max=8)
 	private String name;
+	
+	@NotEmpty
+	@Email
 	private String email;
+	
 	private String pwd;
 	private String gender;
 	private String role;

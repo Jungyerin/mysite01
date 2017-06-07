@@ -11,10 +11,14 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
+
+	<!--aop autoproxy -->
+	<aop:aspectj-autoproxy />
+
 	<context:annotation-config />
 
 	<context:component-scan
-		base-package="com.jx372.mysite.repository,com.jx372.mysite.service,com.jx372.mysite.exception">
+		base-package="com.jx372.mysite.repository,com.jx372.mysite.service,com.jx372.mysite.exception,com.jx372.mysite.aspect">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Repository" />
 		<context:include-filter type="annotation"
@@ -42,6 +46,12 @@
 	</bean>
 
 
-
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages/messages_ko</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>
