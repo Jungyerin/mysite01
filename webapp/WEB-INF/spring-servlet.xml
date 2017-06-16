@@ -73,7 +73,7 @@
 	<mvc:annotation-driven />
 
 	<!-- the mvc resources tag does the magic -->
-	<mvc:resources mapping="/uploads/images/**" location="file:/$webroot/uploads/" />
+	<mvc:resources mapping="/uploads/images/**" location="file:/uploads/" />
 
 	<!-- 멀티파트 리졸버 -->
 	<bean id="multipartResolver"
