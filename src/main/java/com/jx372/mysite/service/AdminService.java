@@ -86,6 +86,7 @@ public class AdminService {
 		
 		byte[] fileData = multipartFile.getBytes();
 		FileOutputStream fos =  new FileOutputStream(SAVE_PATH+"/"+saveFileName);
+		System.out.println(saveFileName);
 		fos.write(fileData);
 		fos.close();
 
