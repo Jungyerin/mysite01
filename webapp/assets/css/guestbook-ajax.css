@@ -59,9 +59,10 @@ hr {
 }
 
 #guestbook ul li {
-	background: url(/mysite01/assets/images/user.png) left center no-repeat;
+	background: url(/mysite01/assets/images/user.png) left top no-repeat;
 	margin: 10px 10px;
-	height: 80px;
+	min-height : 80px;
+	height: auto;
 	position: relative;
 }
 
@@ -77,14 +78,15 @@ hr {
 	margin: 5px 50px;
 	padding: 5px 5px;
 	width: 450px;
-	height: 40px;
+	min-height: 40px;
+	height: auto;
 }
 
 #guestbook ul li a {
 	
 	position: absolute;
 	left: 18px; 
-	top : 45px;
+	top : 20px;
 	background: url(/mysite01/assets/images/delete.png) 0 0 no-repeat;
 	width : 20px;
 	height : 20px;
