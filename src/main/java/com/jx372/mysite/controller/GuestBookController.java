@@ -38,9 +38,15 @@ public class GuestBookController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String add(@ModelAttribute GuestBookVo gbVo) {
-
+	public String add(@ModelAttribute GuestBookVo gbVo,
+						@RequestParam("guestbook") String guestbook) {
+		
 		gbService.add(gbVo);
+		
+		if(guestbook.equals("ajax")){
+			return "redirect:/guestbook/ajax";
+		}
+		
 		return "redirect:/guestbook/list";
 	}
 
@@ -64,6 +70,16 @@ public class GuestBookController {
 
 		return "redirect:/guestbook/list";
 
+	}
+	
+	@RequestMapping("/ajax")
+	public String ajax(HttpSession session,
+			// @ModelAttribute List<GuestBookVo> list,
+			Model model, @ModelAttribute UserVo authUser) {
+		List<GuestBookVo> list = gbService.getList();
+		authUser = (UserVo) session.getAttribute("authUser");
+		model.addAttribute("list", list);
+		return "guestbook/index-ajax";
 	}
 
 }

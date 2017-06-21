@@ -1,0 +1,92 @@
+@CHARSET "UTF-8";
+
+@import "mysite.css";
+
+#guestbook {
+	margin: 20px auto;
+	width: 540px;
+}
+
+#guestbook form, #guestbook ul {
+	width: 100%
+}
+
+#guestbook h1 {
+	padding: 0 35px;
+	color: #111111;
+	background: url(/mysite01/assets/images/guestbook.png) left 0 no-repeat;
+	background-size: 32px;
+}
+
+#add-form {
+	margin-bottom: 10px;
+}
+
+#add-form input, 
+#add-form textarea {
+	display: bolock;
+	margin-top: 10px;
+	width: 100%;
+	outline: none;
+	font-family: "돋움";
+}
+
+#tx-content {
+	height: 150px;
+}
+
+#add-form input[type="submit"] {
+	border: 1px solid #aaa;
+	color: #6D6D6D;
+	padding: 10px;
+	background-color: #fff;
+	font-weight: bold;
+}
+
+#add-form input[type="submit"]:hover {
+	background-color: #000080;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+hr {
+	border: 1px solid #B6B6B6;
+}
+
+#guestbook ul li strong, 
+#guestbook ul li a {
+	display: block;
+}
+
+#guestbook ul li {
+	background: url(/mysite01/assets/images/user.png) left center no-repeat;
+	margin: 10px 10px;
+	height: 80px;
+	position: relative;
+}
+
+#guestbook ul li strong {
+	color : #B0B0AF;
+	margin: 5px 50px;
+}
+
+#guestbook ul li p {
+	background-color: #FAFAFA;
+	border-radius: 5px;
+	border: 1px solid #EBECEC;
+	margin: 5px 50px;
+	padding: 5px 5px;
+	width: 450px;
+	height: 40px;
+}
+
+#guestbook ul li a {
+	
+	position: absolute;
+	left: 18px; 
+	top : 45px;
+	background: url(/mysite01/assets/images/delete.png) 0 0 no-repeat;
+	width : 20px;
+	height : 20px;
+	font-size : 0;
+}

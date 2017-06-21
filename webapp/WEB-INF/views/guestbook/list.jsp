@@ -10,9 +10,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link
-	href="${pageContext.servletContext.contextPath }/assets/css/main.css"
-	rel="stylesheet" type="text/css">
+<link href="${pageContext.servletContext.contextPath }/assets/css/guestbook.css" rel="stylesheet" type="text/css">
 <title>mysite</title>
 </head>
 <body>
@@ -24,6 +22,7 @@
 					action="${pageContext.servletContext.contextPath }/guestbook/add"
 					method="post">
 					<!--input type="hidden" name="a" value="add"-->
+					<input type="hidden" name="guestbook" value="noajax">
 					<table border="1" width="500">
 						<tr>
 							<td>이름</td>
