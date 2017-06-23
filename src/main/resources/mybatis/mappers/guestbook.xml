@@ -30,7 +30,6 @@
 			and name= #{name }
 		]]>
 	</insert>
-
-
+	
 
 </mapper>
