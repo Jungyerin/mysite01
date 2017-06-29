@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jx372.mysite.dto.JSONResult;
 import com.jx372.mysite.service.UserService;
 
 @Controller("userApiController")
@@ -20,16 +21,12 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping("/checkemail")
-	public Map<String, Object> checkEmail(
+	public JSONResult checkEmail(
 			@RequestParam(value="email", required=true, defaultValue="") String email){
 		
 		boolean exist = userService.existEamil(email);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("result", "success");
-		map.put("data", exist);		
-		
-		return map;
+		return JSONResult.success(exist);
 	}
+	
 
 }

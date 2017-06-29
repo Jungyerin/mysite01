@@ -25,20 +25,24 @@ public class GuestBookDao {
 
 	@Autowired
 	private SqlSession sqlSession;
-	
+
 	@Autowired
 	private DataSource datasource;
 
 	public boolean insert(GuestBookVo vo) {
-		int count=sqlSession.insert("guestbook.insert", vo);
-		return count==1;
+		int count = sqlSession.insert("guestbook.insert", vo);
+		return count == 1;
 	}
 
 	public List<GuestBookVo> getList() {
 
-
 		List<GuestBookVo> list = sqlSession.selectList("guestbook.getlist");
-		
+		return list;
+	}
+
+	public List<GuestBookVo> getList(Long startNo) {
+
+		List<GuestBookVo> list = sqlSession.selectList("guestbook.getlist2", startNo);
 		return list;
 	}
 
@@ -47,8 +51,8 @@ public class GuestBookDao {
 		map.put("no", no);
 		map.put("pwd", pwd);
 		map.put("name", name);
-		int count = sqlSession.delete("guestbook.delete",map);
-		return count==1;
+		int count = sqlSession.delete("guestbook.delete", map);
+		return count == 1;
 	}
 
 }

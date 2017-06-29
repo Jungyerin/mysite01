@@ -14,6 +14,10 @@ public class GuestBookService {
 	@Autowired
 	private GuestBookDao gbDao;
 
+	public List<GuestBookVo> getList(Long startNo) {
+		return gbDao.getList(startNo);
+	}
+	
 	public List<GuestBookVo> getList() {
 		return gbDao.getList();
 	}

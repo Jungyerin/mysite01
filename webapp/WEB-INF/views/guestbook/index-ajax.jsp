@@ -15,6 +15,49 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+
+var render = function(vo){
+	//상용 app에서는 template library를 사용한다 ex)ejs, leaf 
+	var html = 
+		"<li data-no='"+vo.no+"'>" + 
+		"<strong>"+vo.name +"</strong>" +
+		"<p>"+vo.message.replace(/\n/gi, "<br>") +"</p>" +			//g는 global로 전체 개행에 적용 
+		"<a href='' data-no='"+ vo.no +"'>삭제</a>" +
+		"</li>";
+	$("#list-guestbook").append(html);
+	
+}
+
+$(function(){
+	
+	
+	$("#btn-next").click(function(){
+		$.ajax( {
+			url : "${pageContext.request.contextPath }/guestbook/api/list?sno=0",
+			type: "get",
+			dataType: "json",
+			data: "",
+			//contentType: 'application/json', //JSON타입으로 데이터를 보낼 때 사용.
+			success: function(response){
+				if(response.result === "fail"){
+					console.error(response.message);
+					return;	
+				}
+				//rendering
+				$.each(response.data, function(index, vo){
+					render(vo);
+				});
+				
+			},
+			error: function( jqXHR, status, e ){
+				console.error( status + " : " + e );
+			}
+			});
+	});
+})
+
+</script>
 </head>
 <body>
 	<div id="container">
@@ -33,18 +76,12 @@
 				<hr/>
 				
 				<ul id="list-guestbook">
-				<c:set var="count" value="${fn:length(list) }" />
-				<!-- int i=list.size(); -->
-				<c:forEach items="${list }" var="vo" varStatus="status">
-					<li data-no=''>
-						<strong>${vo.name }</strong>
-						<p>
-							${fn:replace(vo.message, newLine,"<br>") }
-						</p>
-						<a href='' data-no=''>삭제</a>
-					</li>
-					</c:forEach>									
+												
 				</ul>
+				<div style="margin:20px 0; text-align:center">
+					<button id="btn-next" style="padding:10px 20px">다음</button>
+				</div>
+				
 			</div>					
 		</div>
 		<c:import url="/WEB-INF/views/include/navigation.jsp">
