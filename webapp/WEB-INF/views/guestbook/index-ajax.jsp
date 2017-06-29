@@ -26,7 +26,7 @@
 		var html = "<li data-no='"+vo.no+"'>" + "<strong>" + vo.name
 				+ "</strong>" + "<p>" + vo.message.replace(/\n/gi, "<br>")
 				+ "</p>" + //g는 global로 전체 개행에 적용 
-				"<a href='' data-no='"+ vo.no +"'>삭제</a>" + "</li>";
+				"<a href='#dialog-delete-form' data-no='"+ vo.no +"'>삭제</a>" + "</li>";
 		$("#list-guestbook").append(html);
 
 	}
@@ -108,6 +108,19 @@
 				</div>
 
 			</div>
+			<div id="dialog-delete-form" title="메세지 삭제" style="display:none">
+  				<p class="validateTips normal">작성시 입력했던 비밀번호를 입력하세요.</p>
+  				<p class="validateTips error" style="display:none">비밀번호가 틀립니다.</p>
+  				<form>
+ 					<input type="password" id="password-delete" value="" class="text ui-widget-content ui-corner-all">
+					<input type="hidden" id="hidden-no" value="">
+					<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+  				</form>
+			</div>
+			<div id="dialog-message" title="" style="display:none">
+  				<p></p>
+			</div>	
+			
 		</div>
 		<c:import url="/WEB-INF/views/include/navigation.jsp">
 			<c:param name="menu" value="guestbook-ajax" />
