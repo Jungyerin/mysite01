@@ -60,6 +60,7 @@ public class UserController {
 			return "user/join";
 		}
 		log("join-post");
+		System.out.println(userVo);
 	//	userService.join(userVo);
 		return "redirect:/user/joinsuccess";
 	}
