@@ -26,8 +26,15 @@ public class GuestBookService {
 		gbDao.insert(gbVo);
 	}
 
-	public void delete(Long no, String pwd, String name) {
-		gbDao.delete(no, pwd, name);
+	public boolean delete(Long no, String pwd, String name) {
+		boolean i = gbDao.delete(no, pwd, name);
+		return i;
+		
+	}
+	
+	public boolean delete(GuestBookVo vo) {
+		boolean i = gbDao.delete(vo);
+		return i;
 		
 	}
 

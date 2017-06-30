@@ -55,4 +55,9 @@ public class GuestBookDao {
 		return count == 1;
 	}
 
+	public boolean delete(GuestBookVo vo) {		
+		int count = sqlSession.delete("guestbook.delete2", vo);
+		return count == 1;
+	}
+
 }

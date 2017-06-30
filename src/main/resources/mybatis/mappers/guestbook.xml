@@ -45,7 +45,16 @@
 			where no=#{no} 
 			and pwd=#{pwd } 
 			and name= #{name }
-		]]>
+		]]>		
+	</insert>
+	
+	<insert id="delete2" parameterType="guestbookvo" >
+		<![CDATA[
+			delete 
+			from guest_book 
+			where no=#{no} 
+			and pwd=#{pwd } 
+		]]>		
 	</insert>
 	
 
