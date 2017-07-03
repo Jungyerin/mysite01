@@ -44,7 +44,17 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-
+	<!-- CORS filter 등록 --> 
+	<filter>
+		<filter-name>corsFilter</filter-name>
+		<filter-class>com.jx372.security.CORSFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>corsFilter</filter-name>
+		<url-pattern>/guestbook/api/*</url-pattern>
+	</filter-mapping>
+	
+	
 	<!-- Dispatcher Server Mapping -->
 	<servlet>
 		<servlet-name>spring</servlet-name>

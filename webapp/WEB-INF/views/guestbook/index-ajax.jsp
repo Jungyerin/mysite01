@@ -55,11 +55,20 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/ejs/ejs.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+	//jqeury plugin
+(function($){
+	
+	$.fn.hello = function(){
+		console.log($(this).attr("id")+"---------> hello!!!");
+	}
+	
+})(jQuery);
+	
+	
+	
 	var isEnd = false;
 	var listItemTemplate = new EJS( { url:"${pageContext.request.contextPath }/assets/js/ejs-template/guestbook-list-item.ejs" } );
 	var listTemplate = new EJS( { url:"${pageContext.request.contextPath }/assets/js/ejs-template/guestbook-list.ejs" } );
-	
-
 	var messageBox = function(title, message, callback) {
 		$("#dialog-message").attr("title", title);
 		$("#dialog-message p").text(message);
@@ -107,7 +116,7 @@
 		console.log("-------->" + startNo);
 
 		$.ajax({
-			url : "${pageContext.request.contextPath }/guestbook/api/list?sno="
+			url : "http://guestbook.jx372.com:8088${pageContext.request.contextPath }/guestbook/api/list?sno="
 					+ startNo,
 			type : "get",
 			dataType : "json",
@@ -115,7 +124,7 @@
 			//contentType: 'application/json', //JSON타입으로 데이터를 보낼 때 사용.
 			success : function(response) {
 				if (response.result === "fail") {
-					console.error(response.message);
+					console.warn(response.message);
 					return;
 				}
 
@@ -132,6 +141,7 @@
 				
 				var html = listTemplate.render(response);
 				$("#list-guestbook").append(html);
+				$("#list-guestbook").hello();
 
 			},
 			error : function(jqXHR, status, e) {

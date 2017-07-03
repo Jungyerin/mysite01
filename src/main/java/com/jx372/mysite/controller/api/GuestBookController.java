@@ -18,6 +18,8 @@ import com.jx372.mysite.dto.JSONResult;
 import com.jx372.mysite.service.GuestBookService;
 import com.jx372.mysite.vo.GuestBookVo;
 
+//@CrossOrigin({"http://localhost:8088"})
+//@CrossOrigin({"*"})
 @Controller("guestbookApiController")
 @RequestMapping("/guestbook/api")
 public class GuestBookController {
