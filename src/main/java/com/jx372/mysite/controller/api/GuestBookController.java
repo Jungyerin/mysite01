@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,12 +33,22 @@ public class GuestBookController {
 		return JSONResult.success(list);
 	}
 	
+/*	
 	@ResponseBody
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public JSONResult add(@ModelAttribute GuestBookVo gbVo) {
 		
 		guestbookService.add(gbVo);
 		
+		return JSONResult.success(gbVo);
+	}
+*/	
+	 //json형태로 받을때는 modelattribute가 아닌 requestbody
+	@ResponseBody
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public JSONResult add(@RequestBody GuestBookVo gbVo) {
+		
+		guestbookService.add(gbVo);		
 		return JSONResult.success(gbVo);
 	}
 	

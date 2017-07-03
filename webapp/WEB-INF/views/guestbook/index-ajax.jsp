@@ -51,11 +51,14 @@
 }
 </style>
 
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/ejs/ejs.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 	var isEnd = false;
+	var listItemTemplate = new EJS( { url:"${pageContext.request.contextPath }/assets/js/ejs-template/guestbook-list-item.ejs" } );
+	var listTemplate = new EJS( { url:"${pageContext.request.contextPath }/assets/js/ejs-template/guestbook-list.ejs" } );
+	
 
 	var messageBox = function(title, message, callback) {
 		$("#dialog-message").attr("title", title);
@@ -77,11 +80,13 @@
 	}
 	var render = function(vo, mode) {
 		//상용 app에서는 template library를 사용한다 ex)ejs, leaf 
-		var html = "<li data-no='"+vo.no+"'>" + "<strong>" + vo.name
+/*		var html = "<li data-no='"+vo.no+"'>" + "<strong>" + vo.name
 				+ "</strong>" + "<p>" + vo.message.replace(/\n/gi, "<br>")
 				+ "</p>" + //g는 global로 전체 개행에 적용 
 				"<a href='#dialog-delete-form' data-no='"+ vo.no +"'>삭제</a>"
-				+ "</li>";
+				+ "</li>";*/
+				
+		var html = listItemTemplate.render(vo);
 
 		if (mode === true) {
 			$("#list-guestbook").prepend(html);
@@ -119,10 +124,14 @@
 					isEnd = true;
 					$("#btn-next").prop("disabled", true);
 				}
-				//rendering
+				
+				/*//rendering
 				$.each(response.data, function(index, vo) {
 					render(vo);
-				});
+				});*/
+				
+				var html = listTemplate.render(response);
+				$("#list-guestbook").append(html);
 
 			},
 			error : function(jqXHR, status, e) {
@@ -194,69 +203,71 @@
 			$("#delete-no").val(no);
 			dialogDelete.dialog("open");
 		});
+		
+		
 
-		$("#add-form")
-				.submit(
-						function(event) {
-							//submit event 기본 동작을 막음
-							//posting을 막음 함수로 통신하기 위해서
-							event.preventDefault();
-
-							//validate form data 
-							var name = $("#input-name").val();
-							if (name === "") {
-								//alert("이름은 필수 입력 항목입니다.");
-								messageBox("방명록에 글 남기기", "이름은 필수 입력 항목입니다.",
-										function() {
-											$("#input-name").focus();
-										});
-								$("#input-name").focus();
-								return;
-							}
-
-							var password = $("#input-password").val();
-							if (password === "") {
-								messageBox("방명록에 글 남기기", "비밀번호는 필수 입력 항목입니다.",
-										function() {
-											$("#input-name").focus();
-										});
-								return;
-							}
-
-							var message = $("#ta-message").val();
-							if (message == "") {
-								messageBox("방명록에 글 남기기", "내용은 필수 입력 항목입니다.",
-										function() {
-											$("#ta-message").focus();
-										});
-								return;
-							}
-
-							console.log("validation.ok");
-
-							$.ajax({
-									url : "${pageContext.request.contextPath }/guestbook/api/add",
-									type : "post",
-									dataType : "json",
-									data : "name=" + name + "&" + "pwd="
-											+ password + "&" + "message="
-											+ message,
-								success : function(response) {
-										if (response.result === "fail") {
-											console.error(response.message);
-											return;
-										}
-											//rendering
-										console.log(response.data.name);
-										render(response.data, true);
-											//reset form
-										$("#add-form")[0].reset();
-								},
-								error : function(jqXHR, status, e) {
-										console.error(status + " : " + e);
-									}
-								});
+		$("#add-form").submit(function(event) {
+				//submit event 기본 동작을 막음
+				//posting을 막음 함수로 통신하기 위해서
+				event.preventDefault();
+				//validate form data 
+				var vo={};
+				
+				vo.name = $("#input-name").val();
+				if (vo.name === "") {
+					//alert("이름은 필수 입력 항목입니다.");
+					messageBox("방명록에 글 남기기", "이름은 필수 입력 항목입니다.",
+						function() {
+							$("#input-name").focus();
 						});
+						$("#input-name").focus();
+						return;
+				}
+
+				vo.pwd = $("#input-password").val();
+				if (vo.pwd === "") {
+					messageBox("방명록에 글 남기기", "비밀번호는 필수 입력 항목입니다.",
+						function() {
+								$("#input-name").focus();
+							});
+					return;
+				}
+
+				vo.message = $("#ta-message").val();
+				if (vo.message == "") {
+					messageBox("방명록에 글 남기기", "내용은 필수 입력 항목입니다.",
+							function() {
+								$("#ta-message").focus();
+							});
+					return;
+				}
+
+				console.log("validation.ok");
+
+			//	console.log($.param(vo));
+			//	console.log(JSON.stringify(vo));
+				$.ajax({
+						url : "${pageContext.request.contextPath }/guestbook/api/add",
+						type : "post",
+						dataType : "json",
+						data : JSON.stringify( vo ),
+						contentType: 'application/json; charset=utf-8', //json type으로 보낼때
+					success : function(response) {
+							if (response.result === "fail") {
+								console.error(response.message);
+								return;
+							}
+								//rendering
+							console.log(response.data.name);
+							render(response.data, true);
+								//reset form
+							$("#add-form")[0].reset();
+					},
+					error : function(jqXHR, status, e) {
+							console.error(status + " : " + e);
+						}
+					});
+			});
 
 		$(window).scroll(function() {
 			var $window = $(this);
