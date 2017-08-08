@@ -50,7 +50,8 @@ public class GuestBookController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public JSONResult add(@RequestBody GuestBookVo gbVo) {
 		
-		guestbookService.add(gbVo);		
+		guestbookService.add(gbVo);	
+		System.out.println(gbVo);
 		return JSONResult.success(gbVo);
 	}
 	
